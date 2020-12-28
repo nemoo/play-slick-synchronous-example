@@ -14,8 +14,8 @@ resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 resolvers += Resolver.jcenterRepo
 
 
-libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.2"
-libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2"
+libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.0.0"
+libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.7.4"
 libraryDependencies += "com.h2database" % "h2" % "1.4.192"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % "test"
