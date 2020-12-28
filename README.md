@@ -1,6 +1,6 @@
 Play 2.8, Synchronous Slick 5 
 ==================
-[![Build Status](https://travis-ci.org/nemoo/play-slick-synchronous-example.svg?branch=master)](https://travis-ci.org/nemoo/play-slick-synchronous-example)
+[![Build Status](https://travis-ci.com/nemoo/play-slick-synchronous-example.svg?branch=master)](https://travis-ci.com/nemoo/play-slick-synchronous-example)
 
 An example app using Play Framework 2.8, Slick 5
 
