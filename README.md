@@ -12,7 +12,7 @@ To use slick in the most simple, synchronous way, this project uses the great [b
 * The focus is on how to model your domain, leaving out authorization and ui libraries.
 * Easy to read and understand
 * Uses the beautiful slick 2 blocking api
-* If you need asynchronous features this is not for you
+* If you prefer asynchronous database access, have a look at https://github.com/nemoo/play-slick3-example
 
 Repositories handle interactions with domain aggregates. All public methods are exposed as Futures. Internally, in some cases we need to compose various queries into one block that is carried out within a single transaction. In this case, the individual queries return DBIO query objects. A single public method runs those queries and exposes a Future to the client.
 
