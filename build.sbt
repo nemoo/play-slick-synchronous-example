@@ -23,10 +23,10 @@ libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
-libraryDependencies += "com.mohiva" %% "play-silhouette" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "6.1.1"
+libraryDependencies += "com.mohiva" %% "play-silhouette" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "7.0.0"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.6"
 libraryDependencies += "com.iheart" %% "ficus" % "1.4.7"
 
