@@ -9,6 +9,7 @@ dist
 bin
 /.idea
 /.metals
+/.vscode
 /*.iml
 /out
 /.idea_modules
