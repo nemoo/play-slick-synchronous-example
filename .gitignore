@@ -1,6 +1,7 @@
 logs
 project/project
 project/target
+project/.bloop
 target
 tmp
 .history
@@ -18,3 +19,4 @@ bin
 /RUNNING_PID
 /.settings
 /.target
+project/metals.sbt
