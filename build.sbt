@@ -28,7 +28,7 @@ libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "6.1.
 libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "6.1.1"
 libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "6.1.1"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.6"
-libraryDependencies += "com.iheart" %% "ficus" % "1.4.7"
+libraryDependencies += "com.iheart" %% "ficus" % "1.5.0"
 
 
 
