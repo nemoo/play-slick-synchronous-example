@@ -1,0 +1,14 @@
+@(projects: List[Project], temperature: Long)(implicit user: User)
+
+@main("Projects") {
+<h1>Projects</h1>
+	@projects.map{project =>
+		@project.name
+		<a href="@routes.Application.projects(project.id)">details</a>
+		<a href="@routes.Application.delete(project.id)">delete</a>
+		<br>
+	}
+	<p>
+		The temperature today is @temperature
+	</p>
+}
