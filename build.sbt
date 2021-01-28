@@ -1,3 +1,5 @@
+import scala.sys.process.Process
+
 name := """play-slick-example"""
 
 version := "1.0-SNAPSHOT"
@@ -23,12 +25,26 @@ libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
-libraryDependencies += "com.mohiva" %% "play-silhouette" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "6.1.1"
-libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "6.1.1"
-libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.11"
+libraryDependencies += "org.webjars" % "bootstrap" % "4.5.3"
+libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.3.0"
+libraryDependencies += "org.webjars" % "popper.js" % "1.12.9"
+libraryDependencies += "org.webjars" % "jquery" % "3.5.1"
+libraryDependencies += "org.webjars" % "momentjs" % "2.24.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "7.0.0"
+libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "7.0.0"
+libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.6"
 libraryDependencies += "com.iheart" %% "ficus" % "1.4.7"
 
+val generateSha1: Unit =  {
+  val sha1 = try {
+    Process("git rev-parse HEAD").!!.linesIterator.toList.head
+  } catch {
+    case e: Exception => println("Could not extract sha1 hash, you need to install command line git."); "???"
+  }
+  IO.write(file("conf/version.conf"), s"""sha1="$sha1"""")
+}
 
-
+//enable displaying of link to intellij in error page
+javaOptions += "-Dplay.editor=http://localhost:63342/api/file/?file=%s&line=%s"

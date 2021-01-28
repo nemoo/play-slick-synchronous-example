@@ -1,8 +1,7 @@
-package utils
+package utils.auth
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
-import models.{ Administrator, NormalUser, User}
 import play.api.Logger
 
 import scala.concurrent.Future
