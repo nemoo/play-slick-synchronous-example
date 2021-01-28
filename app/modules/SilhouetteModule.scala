@@ -11,7 +11,6 @@ import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticator, _}
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
-import models.User
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.ceedubs.ficus.readers.ValueReader
@@ -19,7 +18,8 @@ import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import com.typesafe.config.Config
 import play.api.mvc.{Cookie, CookieHeaderEncoding}
-import utils.{AuthEnv, SecurityErrorHandler, UserService}
+import utils.auth.{AuthEnv, User, UserService}
+import utils.errorhandler.SecurityErrorHandler
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
