@@ -2,8 +2,11 @@
 //logLevel := Level.Warn
 
 
-resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
-
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.0")
 
-addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.17")
+addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.18")
+
+addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.12")
+addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.3")
+addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
+addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")

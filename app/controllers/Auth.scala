@@ -1,7 +1,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, LogoutEvent, Silhouette}
 import com.mohiva.play.silhouette.api.actions.SecuredRequest
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
@@ -11,7 +10,8 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.mvc._
 import play.api.data.Forms._
-import utils.{AuthEnv, AuthenticatorServiceImpl, UserService}
+import utils.auth.{AuthEnv, AuthenticatorServiceImpl, UserService}
+import utils.Config
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -21,6 +21,7 @@ class Auth @Inject() (
   val controllerComponents: ControllerComponents,
   authenticator: AuthenticatorServiceImpl,
   userService: UserService,
+  config: utils.Config,
   val silhouette: Silhouette[AuthEnv])(
   val ex: ExecutionContext)
 extends BaseController {
@@ -28,7 +29,7 @@ extends BaseController {
   val logger = Logger(this.getClass())
 
   def signin = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
-    Ok(views.html.signin())
+    Ok(views.html.signin(config = config))
   }
 
   val signInForm = Form(mapping(

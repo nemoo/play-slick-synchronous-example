@@ -1,13 +1,12 @@
-package utils
+package utils.errorhandler
 
 import com.mohiva.play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
-import play.api.mvc._
-import play.api.mvc.Results._
-
-import scala.concurrent.Future
-import javax.inject.Inject
-
 import play.api.Logger
+import play.api.mvc.Results._
+import play.api.mvc._
+
+import javax.inject.Inject
+import scala.concurrent.Future
 
 
 
