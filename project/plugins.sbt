@@ -2,7 +2,7 @@
 //logLevel := Level.Warn
 
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.0")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.7")
 
 addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.18")
 
