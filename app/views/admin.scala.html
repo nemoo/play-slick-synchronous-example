@@ -1,5 +1,6 @@
-@()(implicit user: User)
+@( config: utils.Config)(implicit user: utils.auth.User)
 
-@main("Admin") {
+@main("Admin", config) {
 <h1>Admin page</h1>
+Only admins can see this page...
 }
