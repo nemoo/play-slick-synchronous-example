@@ -10,3 +10,4 @@ addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.13")
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.4.4")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
+
