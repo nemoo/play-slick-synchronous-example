@@ -1,8 +1,7 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
-import models.{ProjectRepo, TaskRepo, User}
+import models.{ProjectRepo, TaskRepo}
 import play.api.mvc._
 import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
 import com.mohiva.play.silhouette
@@ -11,7 +10,8 @@ import com.mohiva.play.silhouette.api.actions._
 import play.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-import utils.{AuthEnv, WeatherService}
+import utils.{Config, WeatherService}
+import utils.auth.AuthEnv
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,6 +22,7 @@ class Application @Inject()(
                              weather: WeatherService,
                              silhouette: Silhouette[AuthEnv],
                              val controllerComponents: ControllerComponents,
+                             config: Config,
                              env: Environment
                            )(protected val dbConfigProvider: DatabaseConfigProvider,
                              val ex: ExecutionContext )
@@ -64,7 +65,7 @@ class Application @Inject()(
 
       val temperature = weather.forecast("NYC")
       val projects = projectRepo.all
-       Ok(views.html.projects(projects, temperature))
+       Ok(views.html.projects(projects, temperature, config))
     }
   }
 
@@ -74,7 +75,7 @@ class Application @Inject()(
 
       val project =  projectRepo.findById(id).get
       val tasks = taskRepo.findByProjectId(id)
-      Ok(views.html.project(project, tasks))
+      Ok(views.html.project(project, tasks, config))
     }
   }
 
