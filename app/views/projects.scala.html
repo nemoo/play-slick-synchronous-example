@@ -1,13 +1,24 @@
-@(projects: List[Project], temperature: Long)(implicit user: User)
+@(projects: List[Project], temperature: Long, config: utils.Config)(implicit user: utils.auth.User)
 
-@main("Projects") {
+@main("Projects", config) {
 <h1>Projects</h1>
-	@projects.map{project =>
-		@project.name
-		<a href="@routes.Application.projects(project.id)">details</a>
-		<a href="@routes.Application.delete(project.id)">delete</a>
-		<br>
-	}
+	<div class="row">
+		<div class="col-6">
+			<table class="table">
+				<tbody>
+				@projects.map{project =>
+					<tr>
+						<th scope="row"><a href="@routes.Application.projects(project.id)">@project.name</a></th>
+						<td>
+							@views.html.biIcon("bi-trash")
+							<a href="@routes.Application.delete(project.id)">delete</a>
+						</td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<p>
 		The temperature today is @temperature
 	</p>
