@@ -34,7 +34,7 @@ libraryDependencies += "com.mohiva" %% "play-silhouette" % "7.0.0"
 libraryDependencies += "com.mohiva" %% "play-silhouette-password-bcrypt" % "7.0.0"
 libraryDependencies += "com.mohiva" %% "play-silhouette-persistence" % "7.0.0"
 libraryDependencies += "com.mohiva" %% "play-silhouette-crypto-jca" % "7.0.0"
-libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.6"
+libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.11"
 libraryDependencies += "com.iheart" %% "ficus" % "1.4.7"
 
 val generateSha1: Unit =  {
