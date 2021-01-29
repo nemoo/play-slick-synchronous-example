@@ -1,7 +1,8 @@
-package utils
+package utils.auth
+
+import play.api.Logger
 
 import javax.inject.Inject
-import play.api.Logger
 import scala.concurrent.Future
 
 
