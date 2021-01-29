@@ -1,11 +1,27 @@
 @(project: Project
-, tasks: List[Task])(implicit user: User)
+, tasks: List[Task], config: utils.Config)(implicit user: utils.auth.User)
 
-@main(project.name) {
-<h1>Project @project.name (id: @project.id) </h1>
-<br>
+@main(project.name, config) {
+<h1>Project @project.name  </h1>
+
+    name: @project.name
+    <br>
+    id: @project.id
+    <h3>Tasks</h3>
 	@tasks.map{task =>
-    taskId: @task.id color: @task.color; status: @task.status.toString
-        <br>
+       <div class="row">
+           <div class="col-sm-6 mb-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">#@task.id</h5>
+                        <p class="card-text">
+                            color: @task.color
+                            <br>
+                            status: @task.status.toString
+                        </p>
+                    </div>
+                </div>
+           </div>
+       </div>
 	}
 }
