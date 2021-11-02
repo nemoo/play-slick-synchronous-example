@@ -6,7 +6,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.13.6"
+scalaVersion := "2.13.7"
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -26,8 +26,8 @@ libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
 libraryDependencies += "org.webjars" % "bootstrap" % "4.6.0"
-libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.5.0"
-libraryDependencies += "org.webjars" % "popper.js" % "1.16.1-lts"
+libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.6.1"
+libraryDependencies += "org.webjars" % "popper.js" % "1.12.9-1"
 libraryDependencies += "org.webjars" % "jquery" % "3.5.1"
 libraryDependencies += "org.webjars" % "momentjs" % "2.29.1"
 libraryDependencies += "com.mohiva" %% "play-silhouette" % "7.0.0"
