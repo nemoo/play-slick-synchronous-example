@@ -17,7 +17,7 @@ class SecurityErrorHandler @Inject() extends  SecuredErrorHandler with Unsecured
   // 401 - Unauthorized
   override def onNotAuthenticated(implicit request: RequestHeader): Future[Result] = Future.successful {
     logger.debug("notAuthenticated")
-    Redirect(controllers.routes.Auth.signin()).withSession(request.session + ("ENTRY_URI" -> request.uri))
+    Redirect(controllers.routes.Auth.signin).withSession(request.session + ("ENTRY_URI" -> request.uri))
   }
 
   // 403 - Forbidden
