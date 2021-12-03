@@ -26,18 +26,18 @@ class Auth @Inject() (
   val ex: ExecutionContext)
 extends BaseController {
 
-  val logger = Logger(this.getClass())
+  val logger: Logger = Logger(this.getClass)
 
-  def signin = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
+  def signin: Action[AnyContent] = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
     Ok(views.html.signin(config = config))
   }
 
-  val signInForm = Form(mapping(
+  val signInForm: Form[Credentials] = Form(mapping(
     "login" -> nonEmptyText,
     "password" -> nonEmptyText
   )(Credentials.apply)(Credentials.unapply))
 
-  def authenticate = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+  def authenticate: Action[AnyContent] = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
 //    Redirect(controllers.routes.Application.listProjects())
     signInForm.bindFromRequest.fold(
       //      formWithErrors => Future.successful(Redirect(controllers.routes.Auth.signin().toString)),
@@ -47,7 +47,7 @@ extends BaseController {
         val entryUri = request.session.get("ENTRY_URI")
         val targetUri: String = entryUri.getOrElse(routes.Application.listProjects.toString)
         logger.info(s"targetUri: $targetUri")
-        authenticator.authenticate(identifier, password).flatMap { case _ =>
+        authenticator.authenticate(identifier, password).flatMap { _ =>
           val loginInfo = LoginInfo(providerID = "????", providerKey = identifier)
           userService.retrieve(loginInfo).flatMap {
             case Some(user) =>
@@ -69,7 +69,7 @@ extends BaseController {
     )
   }
 
-  def signout = silhouette.SecuredAction.async { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def signout: Action[AnyContent] = silhouette.SecuredAction.async { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     val result = Redirect(routes.Auth.signin)
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     silhouette.env.authenticatorService.discard(request.authenticator, result)
