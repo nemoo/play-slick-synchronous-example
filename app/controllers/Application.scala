@@ -11,7 +11,7 @@ import play.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import utils.{Config, WeatherService}
-import utils.auth.AuthEnv
+import utils.auth.{AuthEnv, User}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,18 +32,18 @@ class Application @Inject()(
 
   val db = dbConfigProvider.get[JdbcProfile].db
 
-  def test = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
+  def test: Action[AnyContent] = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
     Ok("test")
   }
 
-  def addTaskToProject(color: String, projectId: Long) = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def addTaskToProject(color: String, projectId: Long): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withSession { implicit session =>
       projectRepo.addTask(color, projectId)
       Redirect(routes.Application.projects(projectId))
     }
   }
 
-  def modifyTask(taskId: Long, color: Option[String]) = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def modifyTask(taskId: Long, color: Option[String]): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
       db.withSession { implicit session =>
 
         val updatedRows = taskRepo.partialUpdate(taskId, color, None, None)
@@ -52,16 +52,16 @@ class Application @Inject()(
       }
   }
 
-  def createProject(name: String)= silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def createProject(name: String): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withSession { implicit session =>
       val id = projectRepo.create(name)
       Ok(s"project $id created")
     }
   }
 
-  def listProjects = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def listProjects: Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withSession { implicit session =>
-      implicit val user = request.identity
+      implicit val user: User = request.identity
 
       val temperature = weather.forecast("NYC")
       val projects = projectRepo.all
@@ -69,9 +69,9 @@ class Application @Inject()(
     }
   }
 
-  def projects(id: Long) = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def projects(id: Long): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withSession { implicit session =>
-      implicit val user = request.identity
+      implicit val user: User = request.identity
 
       val project =  projectRepo.findById(id).get
       val tasks = taskRepo.findByProjectId(id)
@@ -79,10 +79,10 @@ class Application @Inject()(
     }
   }
 
-  def delete(id: Long) = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
+  def delete(id: Long): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withTransaction { implicit session =>
       projectRepo.delete(id)
-      Redirect(routes.Application.listProjects())
+      Redirect(routes.Application.listProjects)
     }
   }
 
