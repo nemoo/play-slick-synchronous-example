@@ -70,7 +70,7 @@ extends BaseController {
   }
 
   def signout = silhouette.SecuredAction.async { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
-    val result = Redirect(routes.Auth.signin())
+    val result = Redirect(routes.Auth.signin)
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     silhouette.env.authenticatorService.discard(request.authenticator, result)
   }

@@ -82,7 +82,7 @@ class Application @Inject()(
   def delete(id: Long) = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
     db.withTransaction { implicit session =>
       projectRepo.delete(id)
-      Redirect(routes.Application.listProjects())
+      Redirect(routes.Application.listProjects)
     }
   }
 
