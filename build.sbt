@@ -6,7 +6,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.13.7"
+scalaVersion := "2.13.8"
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -26,14 +26,14 @@ libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
 libraryDependencies += "org.webjars" % "bootstrap" % "5.1.3"
-libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.7.2"
+libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.8.0"
 libraryDependencies += "org.webjars" % "popper.js" % "1.12.9-1"
 libraryDependencies += "org.webjars" % "jquery" % "3.5.1"
 libraryDependencies += "org.webjars" % "momentjs" % "2.29.1"
-libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette" % "7.0.2"
-libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-password-bcrypt" % "7.0.2"
-libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-persistence" % "7.0.2"
-libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-crypto-jca" % "7.0.2"
+libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette" % "7.0.3"
+libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-password-bcrypt" % "7.0.3"
+libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-persistence" % "7.0.3"
+libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-crypto-jca" % "7.0.3"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "5.0.2"
 libraryDependencies += "com.iheart" %% "ficus" % "1.5.1"
 
