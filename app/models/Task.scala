@@ -1,13 +1,11 @@
 package models
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.db.slick.DatabaseConfigProvider
 import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
-import Implicits._
+import models.Implicits._
 import play.api.cache.AsyncCacheApi
-import slick.dbio.Effect
-import slick.sql.FixedSqlAction
+import play.api.db.slick.DatabaseConfigProvider
+
+import javax.inject.{Inject, Singleton}
 
 
 
@@ -21,9 +19,9 @@ case class Task(id: Long, color: String, status: TaskStatus.Value, project: Long
 }
 
 object TaskStatus extends Enumeration {
-  val ready = Value("ready")
-  val set = Value("set")
-  val go = Value("go")
+  val ready: TaskStatus.Value = Value("ready")
+  val set: TaskStatus.Value = Value("set")
+  val go: TaskStatus.Value = Value("go")
 }
 
 @Singleton
@@ -54,7 +52,7 @@ class TaskRepo @Inject()(cache: AsyncCacheApi)
       .update(task.patch(color, status, project))
   }
 
-  def all()(implicit session: Session): Seq[Task] =
+  def all(implicit session: Session): Seq[Task] =
     Tasks.list
 
   def insert(task: Task)(implicit session: Session): Long =
