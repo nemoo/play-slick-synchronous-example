@@ -6,7 +6,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio
 import slick.dbio.Effect.Read
 import slick.driver.JdbcProfile
-import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
+import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 
 
 case class Project(id: Long, name: String)

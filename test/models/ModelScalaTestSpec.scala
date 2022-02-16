@@ -1,6 +1,6 @@
 package models
 
-import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
+import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
