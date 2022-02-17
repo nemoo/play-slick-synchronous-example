@@ -19,9 +19,12 @@ resolvers += Resolver.jcenterRepo
 libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
-libraryDependencies += "com.h2database" % "h2" % "2.0.204"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test"
+libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.40.0" % "test"
+libraryDependencies += "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.40.0" % "test"
+
 libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
+libraryDependencies += "org.postgresql" % "postgresql" % "42.3.2"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache

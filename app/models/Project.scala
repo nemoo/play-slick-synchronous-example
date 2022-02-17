@@ -6,7 +6,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio
 import slick.dbio.Effect.Read
 import slick.driver.JdbcProfile
-import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
+import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 
 
 case class Project(id: Long, name: String)
@@ -46,10 +46,10 @@ class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: 
   }
 }
 
-class ProjectsTable(tag: Tag) extends Table[Project](tag, "PROJECT") {
+class ProjectsTable(tag: Tag) extends Table[Project](tag, "project") {
 
-  def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)
-  def name = column[String]("NAME")
+  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
+  def name = column[String]("name")
 
   def * = (id, name) <> (Project.tupled, Project.unapply)
   def ? = (id.?, name.?).shaped.<>({ r => import r._; _1.map(_ => Project.tupled((_1.get, _2.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
