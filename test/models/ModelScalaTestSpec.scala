@@ -21,23 +21,18 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
   var db: Database = _
   var projectRepo: ProjectRepo = _
 
-  override def container: Container = PostgreSQLContainer(dockerImageNameOverride = DockerImageName.parse("postgres:14"))
+  override val container: PostgreSQLContainer = PostgreSQLContainer(dockerImageNameOverride = DockerImageName.parse("postgres:14"))
 
   override def fakeApplication(): Application = {
-    val app = super.fakeApplication()
+    val app = TestContainersPostgreSQLApplicationFactory.produceApplication(container)
     db = app.injector.instanceOf[DatabaseConfigProvider].get[JdbcProfile].db
     projectRepo = app.injector.instanceOf[ProjectRepo]
-    val lifecycle = app.injector.instanceOf[ApplicationLifecycle]
-    lifecycle.addStopHook(() => Future.successful(
-      Evolutions.cleanupEvolutions(app.injector.instanceOf[DBApi].database("default"))
-    ))
     app
   }
 
   "An item " should {
     "be inserted during the first test case" in {
       db.withSession { implicit session =>
-
         projectRepo.create("A")
         val result = projectRepo.all
 
