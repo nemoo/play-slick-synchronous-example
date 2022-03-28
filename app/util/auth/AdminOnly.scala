@@ -1,4 +1,4 @@
-package utils.auth
+package util.auth
 
 import com.mohiva.play.silhouette.api.Authorization
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator

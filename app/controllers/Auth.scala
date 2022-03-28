@@ -8,7 +8,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import utils.auth.{AuthEnv, AuthenticatorServiceImpl, UserService}
+import util.auth.{AuthEnv, AuthenticatorServiceImpl, UserService}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,11 +16,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 class Auth @Inject() (
-  val controllerComponents: ControllerComponents,
-  authenticator: AuthenticatorServiceImpl,
-  userService: UserService,
-  config: utils.Config,
-  val silhouette: Silhouette[AuthEnv])(
+                       val controllerComponents: ControllerComponents,
+                       authenticator: AuthenticatorServiceImpl,
+                       userService: UserService,
+                       config: util.Config,
+                       val silhouette: Silhouette[AuthEnv])(
   val ex: ExecutionContext)
 extends BaseController {
 

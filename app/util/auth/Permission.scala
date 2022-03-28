@@ -1,4 +1,4 @@
-package utils.auth
+package util.auth
 
 sealed trait Permission
 case object Administrator extends Permission

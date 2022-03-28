@@ -10,8 +10,8 @@ import com.mohiva.play.silhouette.api.actions._
 import play.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
-import utils.{Config, WeatherService}
-import utils.auth.{AuthEnv, User}
+import util.{Config, WeatherService}
+import util.auth.{AuthEnv, User}
 
 import scala.concurrent.{ExecutionContext, Future}
 

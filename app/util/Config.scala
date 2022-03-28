@@ -1,4 +1,4 @@
-package utils
+package util
 
 import javax.inject.Inject
 import play.api.{Configuration, Logger}

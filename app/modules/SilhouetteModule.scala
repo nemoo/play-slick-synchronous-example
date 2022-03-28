@@ -18,8 +18,8 @@ import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import com.typesafe.config.Config
 import play.api.mvc.{Cookie, CookieHeaderEncoding}
-import utils.auth.{AuthEnv, User, UserService}
-import utils.errorhandler.SecurityErrorHandler
+import util.auth.{AuthEnv, User, UserService}
+import util.errorhandler.SecurityErrorHandler
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

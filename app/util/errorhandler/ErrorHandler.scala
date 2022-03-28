@@ -1,4 +1,4 @@
-package utils.errorhandler
+package util.errorhandler
 
 import play.api.http.HttpErrorHandler
 import play.api.mvc.Results._

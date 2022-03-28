@@ -7,16 +7,16 @@ import models.{ProjectRepo, TaskRepo}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
-import utils.auth.{AdminOnly, AuthEnv, User}
+import util.auth.{AdminOnly, AuthEnv, User}
 
 import scala.concurrent.ExecutionContext
 
 class Admin @Inject()(
-                             projectRepo: ProjectRepo,
-                             taskRepo: TaskRepo,
-                             silhouette: Silhouette[AuthEnv],
-                             config: utils.Config,
-                             val controllerComponents: ControllerComponents
+                       projectRepo: ProjectRepo,
+                       taskRepo: TaskRepo,
+                       silhouette: Silhouette[AuthEnv],
+                       config: util.Config,
+                       val controllerComponents: ControllerComponents
                            )(protected val dbConfigProvider: DatabaseConfigProvider,
                              val ex: ExecutionContext )
                            extends BaseController {
