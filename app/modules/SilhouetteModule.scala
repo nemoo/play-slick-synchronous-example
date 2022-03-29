@@ -27,18 +27,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class SilhouetteModule extends AbstractModule with ScalaModule{
 
-  implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
-    (config: Config, path: String) => {
-      if (config.hasPathOrNull(path)) {
-        if (config.getIsNull(path))
-          Some(None)
-        else {
-          Some(Cookie.SameSite.parse(config.getString(path)))
-        }
-      } else {
-        None
-      }
-    }
 
   override def configure(): Unit = {
     bind[Silhouette[AuthEnv]].to[SilhouetteProvider[AuthEnv]]
@@ -85,8 +73,15 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
                                    configuration: Configuration,
                                    clock: Clock): AuthenticatorService[CookieAuthenticator] = {
 
-    val config = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
-    val authenticatorEncoder = new CrypterAuthenticatorEncoder(crypter)
+    implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
+      (config: Config, path: String) =>
+        if (config.hasPathOrNull(path))
+          if (config.getIsNull(path)) Some(None)
+          else Some(Cookie.SameSite.parse(config.getString(path)))
+        else None
+
+    val config: CookieAuthenticatorSettings = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
+    val authenticatorEncoder: CrypterAuthenticatorEncoder = new CrypterAuthenticatorEncoder(crypter)
 
     new CookieAuthenticatorService(config, None, signer, cookieHeaderEncoding, authenticatorEncoder, fingerprintGenerator, idGenerator, clock)
   }
@@ -100,7 +95,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
     */
   @Provides
   def provideAuthenticatorCookieSigner(configuration: Configuration): JcaSigner = {
-    val config = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.signer")
+    val config: JcaSignerSettings = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.signer")
     new JcaSigner(config)
   }
 
@@ -112,7 +107,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
     */
   @Provides
   def provideAuthenticatorCrypter(configuration: Configuration): JcaCrypter = {
-    val config = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
+    val config: JcaCrypterSettings = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
     new JcaCrypter(config)
   }
 }
