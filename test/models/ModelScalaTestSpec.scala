@@ -13,6 +13,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.inject.ApplicationLifecycle
 import slick.jdbc.JdbcProfile
 
+import java.time.LocalDateTime
 import scala.concurrent.Future
 
 
@@ -20,6 +21,7 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
 
   var db: Database = _
   var projectRepo: ProjectRepo = _
+  var taskRepo: TaskRepo = _
 
   override val container: PostgreSQLContainer = PostgreSQLContainer(dockerImageNameOverride = DockerImageName.parse("postgres:14"))
 
@@ -27,6 +29,7 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
     val app = TestContainersPostgreSQLApplicationFactory.produceApplication(container)
     db = app.injector.instanceOf[DatabaseConfigProvider].get[JdbcProfile].db
     projectRepo = app.injector.instanceOf[ProjectRepo]
+    taskRepo = app.injector.instanceOf[TaskRepo]
     app
   }
 
@@ -45,6 +48,18 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
         val result = projectRepo.all
 
         result mustBe List.empty
+      }
+    }
+  }
+
+  "An timestamp " should {
+    "be persisted correctly" in {
+      db.withSession { implicit session =>
+        val projectId = projectRepo.create("A")
+
+        val timestamp = LocalDateTime.now()
+        val taskId = taskRepo.insert(Task(0, "blue", TaskStatus.ready, projectId, timestamp))
+        taskRepo.findById(taskId).lastModification mustBe timestamp
       }
     }
   }

@@ -1,12 +1,13 @@
 package models
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio
 import slick.dbio.Effect.Read
 import slick.driver.JdbcProfile
 import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+
+import java.time.LocalDateTime
 
 
 case class Project(id: Long, name: String)
@@ -42,7 +43,7 @@ class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: 
 
   def addTask(color: String, projectId: Long)(implicit session: Session): Long = {
     val project = findById(projectId).get
-    taskRepo.insert(Task(0, color, TaskStatus.ready, project.id))
+    taskRepo.insert(Task(0, color, TaskStatus.ready, project.id, LocalDateTime.now()))
   }
 }
 

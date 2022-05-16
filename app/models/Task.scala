@@ -4,18 +4,27 @@ import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import models.Implicits._
 import play.api.cache.AsyncCacheApi
 import play.api.db.slick.DatabaseConfigProvider
+import util.DateFormat
 
+import java.time.LocalDateTime
 import javax.inject.{Inject, Singleton}
 
 
 
-case class Task(id: Long, color: String, status: TaskStatus.Value, project: Long) {
+case class Task(
+                 id: Long,
+                 color: String,
+                 status: TaskStatus.Value,
+                 project: Long,
+                 lastModification: LocalDateTime
+               ) {
 
   def patch(color: Option[String], status: Option[TaskStatus.Value], project: Option[Long]): Task =
     this.copy(color = color.getOrElse(this.color),
-              status = status.getOrElse(this.status),
-              project = project.getOrElse(this.project))
-
+      status = status.getOrElse(this.status),
+      project = project.getOrElse(this.project),
+      lastModification = LocalDateTime.now())
+  def lastModificationFormatted: String = DateFormat.humanReadable.format(lastModification)
 }
 
 object TaskStatus extends Enumeration {
@@ -75,8 +84,8 @@ private class TasksTable(tag: Tag) extends Table[Task](tag, "task") {
   def color = column[String]("color")
   def status = column[TaskStatus.Value]("status")
   def project = column[Long]("project")
+  def lastModification: Rep[LocalDateTime] = column[LocalDateTime]("last_modification")
 
-  def * = (id, color, status, project) <> (Task.tupled, Task.unapply)
-  def ? = (id.?, color.?, status.?, project.?).shaped.<>({ r => import r._; _1.map(_ => Task.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
+  def * = (id, color, status, project, lastModification) <> (Task.tupled, Task.unapply)
 }
 

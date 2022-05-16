@@ -9,7 +9,8 @@ CREATE TABLE task (
     id SERIAL NOT NULL PRIMARY KEY,
     color varchar(255) NOT NULL,
     status varchar(255) NOT NULL,
-    project integer NOT NULL REFERENCES project (ID)
+    project integer NOT NULL REFERENCES project (ID),
+    last_modification TIMESTAMP NOT NULL
 );
 
 # --- !Downs
