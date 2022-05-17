@@ -10,7 +10,7 @@ CREATE TABLE task (
     color varchar(255) NOT NULL,
     status varchar(255) NOT NULL,
     project integer NOT NULL REFERENCES project (ID),
-    last_modification TIMESTAMP NOT NULL
+    last_modification TIMESTAMPTZ NOT NULL
 );
 
 # --- !Downs
