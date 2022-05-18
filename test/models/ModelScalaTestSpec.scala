@@ -13,7 +13,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.inject.ApplicationLifecycle
 import slick.jdbc.JdbcProfile
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import scala.concurrent.Future
 
 
@@ -57,7 +57,7 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
       db.withSession { implicit session =>
         val projectId = projectRepo.create("A")
 
-        val timestamp = LocalDateTime.now()
+        val timestamp = OffsetDateTime.now()
         val taskId = taskRepo.insert(Task(0, "blue", TaskStatus.ready, projectId, timestamp))
         taskRepo.findById(taskId).lastModification mustBe timestamp
       }

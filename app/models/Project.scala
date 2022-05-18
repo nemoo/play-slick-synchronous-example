@@ -7,7 +7,7 @@ import slick.dbio.Effect.Read
 import slick.driver.JdbcProfile
 import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 
 case class Project(id: Long, name: String)
@@ -43,7 +43,7 @@ class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: 
 
   def addTask(color: String, projectId: Long)(implicit session: Session): Long = {
     val project = findById(projectId).get
-    taskRepo.insert(Task(0, color, TaskStatus.ready, project.id, LocalDateTime.now()))
+    taskRepo.insert(Task(0, color, TaskStatus.ready, project.id, OffsetDateTime.now()))
   }
 }
 
