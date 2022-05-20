@@ -4,7 +4,7 @@ import models.{ProjectRepo, TaskRepo, TestData}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import play.api.Logger
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import util.MyPostgresDriver.blockingApi._
 import play.api.Environment
 import play.api.Mode.Dev
 

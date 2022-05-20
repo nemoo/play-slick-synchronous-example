@@ -1,6 +1,6 @@
 package models
 
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import util.MyPostgresDriver.blockingApi._
 
 object Implicits{
   implicit val taskStatusColumnType = MappedColumnType.base[TaskStatus.Value, String](

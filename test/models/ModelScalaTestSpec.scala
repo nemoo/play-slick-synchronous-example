@@ -1,7 +1,7 @@
 package models
 
 import com.dimafeng.testcontainers.{Container, ForEachTestContainer, PostgreSQLContainer}
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import util.MyPostgresDriver.blockingApi._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice.GuiceOneAppPerTest

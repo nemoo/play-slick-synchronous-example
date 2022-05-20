@@ -5,7 +5,6 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio
 import slick.dbio.Effect.Read
 import slick.driver.JdbcProfile
-//import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import util.MyPostgresDriver.blockingApi._
 
 import java.time.OffsetDateTime

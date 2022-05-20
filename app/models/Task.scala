@@ -1,6 +1,5 @@
 package models
 
-//import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import util.MyPostgresDriver.blockingApi._
 import models.Implicits._
 import play.api.cache.AsyncCacheApi
