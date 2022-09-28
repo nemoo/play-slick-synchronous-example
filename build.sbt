@@ -40,6 +40,9 @@ libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-cryp
 libraryDependencies += "net.codingwell" %% "scala-guice" % "5.0.2"
 libraryDependencies += "com.iheart" %% "ficus" % "1.5.1"
 
+libraryDependencies += "dev.zio" %% "zio"    % "2.0.2"
+libraryDependencies += "dev.zio" %% "zio-streams" % "2.0.2"
+
 val generateSha1: Unit =  {
   val sha1 = try {
     Process("git rev-parse HEAD").!!.linesIterator.toList.head

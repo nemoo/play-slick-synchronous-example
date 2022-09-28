@@ -15,7 +15,7 @@ PATCH   /tasks/:id                           controllers.Application.modifyTask(
 
 GET     /admin                               controllers.Admin.overview
 
-
+GET     /jobs/:name                          controllers.Jobs.create(name: String)
 
 GET     /test                             controllers.Application.test
 
