@@ -1,37 +1,67 @@
 package controllers
 
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import com.mohiva.play.silhouette.api.Silhouette
-import com.mohiva.play.silhouette.api.actions._
-import models.{ProjectRepo, TaskRepo}
-import play.Environment
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.mvc._
-import slick.jdbc.JdbcProfile
-import util.auth.{AuthEnv, User}
-import util.{Config, WeatherService}
+import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
+import zio.Console.printLine
+import zio.{Schedule, ZIO, durationInt}
+
+import java.io.IOException
+//import play.api.mvc._
+import util.Config
+import util.auth.AuthEnv
+import zio.Unsafe
+import zio.stream.ZStream
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
 
 @Singleton
 class Jobs @Inject()(
-                             projectRepo: ProjectRepo,
-                             taskRepo: TaskRepo,
-                             weather: WeatherService,
-                             silhouette: Silhouette[AuthEnv],
-                             val controllerComponents: ControllerComponents,
-                             config: Config,
-                             env: Environment
-                           )(protected val dbConfigProvider: DatabaseConfigProvider,
-                             val ex: ExecutionContext )
-                           extends BaseController {
-                             
-  
+  silhouette: Silhouette[AuthEnv],
+  val controllerComponents: ControllerComponents,
+  config: Config,
+  )
+  extends BaseController {
 
-  val db = dbConfigProvider.get[JdbcProfile].db
+  val jobsIteratorOld: Iterator[String] = new Iterator[String] {
+    var count = 0
+    override def hasNext: Boolean = count <= 2
+    override def next(): String = {
+      count += 1
+      "yes"
+    }
+  }
 
-  def create(jobDescription: String): Action[AnyContent] = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
+  val jobsQueue = scala.collection.mutable.Queue[String]()
+
+  val jobsIterator: Iterator[String] = new Iterator[String] {
+//    override def hasNext: Boolean = jobsQueue.nonEmpty
+    override def hasNext: Boolean = true
+//    override def next(): String = jobsQueue.dequeue()
+    override def next(): String = "ja"
+  }
+
+
+  val runtime = zio.Runtime.default
+
+//  val zioStandardApp: ZIO[Any, IOException, Unit] =
+//    zio.Console.printLine("Hello, World 2!!!")
+//      .repeatN(1)
+//
+//  Unsafe.unsafe { implicit unsafe =>
+//    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
+//  }
+
+  val streamApp: ZStream[Any, Throwable, String] =
+    ZStream
+      .fromIterator(jobsIterator)
+      .schedule(Schedule.spaced(1.second))
+
+  Unsafe.unsafe { implicit unsafe =>
+    runtime.unsafe.run(streamApp.foreach(printLine(_))).getOrThrowFiberFailure()
+  }
+
+  def create(jobDescription: String): Action[AnyContent] = silhouette.UserAwareAction { implicit request: Request[AnyContent] =>
+    jobsQueue.addOne(jobDescription)
     Ok(s"creating job $jobDescription")
   }
 }
