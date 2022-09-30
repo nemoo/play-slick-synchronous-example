@@ -1,24 +1,17 @@
 package controllers
 
-import com.mohiva.play.silhouette.api.Silhouette
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
+import play.api.mvc._
 import zio.Console.printLine
-import zio.{Schedule, ZIO, durationInt}
-
-import java.io.IOException
+import zio.{Schedule, durationInt}
 //import play.api.mvc._
-import util.Config
-import util.auth.AuthEnv
 import zio.Unsafe
 import zio.stream.ZStream
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Jobs @Inject()(
-  silhouette: Silhouette[AuthEnv],
+class JobsZio @Inject()(
   val controllerComponents: ControllerComponents,
-  config: Config,
   )
   extends BaseController {
 
@@ -51,16 +44,16 @@ class Jobs @Inject()(
 //    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
 //  }
 
-  val streamApp: ZStream[Any, Throwable, String] =
-    ZStream
-      .fromIterator(jobsIterator)
-      .schedule(Schedule.spaced(1.second))
+//  val streamApp: ZStream[Any, Throwable, String] =
+//    ZStream
+//      .fromIterator(jobsIterator)
+//      .schedule(Schedule.spaced(1.second))
+//
+//  Unsafe.unsafe { implicit unsafe =>
+//    runtime.unsafe.run(streamApp.foreach(printLine(_))).getOrThrowFiberFailure()
+//  }
 
-  Unsafe.unsafe { implicit unsafe =>
-    runtime.unsafe.run(streamApp.foreach(printLine(_))).getOrThrowFiberFailure()
-  }
-
-  def create(jobDescription: String): Action[AnyContent] = silhouette.UserAwareAction { implicit request: Request[AnyContent] =>
+  def create(jobDescription: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     jobsQueue.addOne(jobDescription)
     Ok(s"creating job $jobDescription")
   }
