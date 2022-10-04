@@ -1,3 +1,3 @@
 
-GET     /jobs/akka/:name                         controllers.JobsAkkaController.create(name: String)
-GET     /jobs/zio/:name                          controllers.JobsZio.create(name: String)
+GET     /                         controllers.JobsAkkaController.create()
+GET     /z                        controllers.JobsZioController.create()

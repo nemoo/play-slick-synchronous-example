@@ -2,7 +2,7 @@ package controllers
 
 import play.api.mvc._
 import zio.Console.printLine
-import zio.{Schedule, durationInt}
+import zio.{Schedule, ZIO, durationInt}
 //import play.api.mvc._
 import zio.Unsafe
 import zio.stream.ZStream
@@ -10,10 +10,7 @@ import zio.stream.ZStream
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class JobsZio @Inject()(
-  val controllerComponents: ControllerComponents,
-  )
-  extends BaseController {
+class JobsZioController @Inject()( val controllerComponents: ControllerComponents ) extends BaseController {
 
   val jobsIteratorOld: Iterator[String] = new Iterator[String] {
     var count = 0
@@ -36,13 +33,13 @@ class JobsZio @Inject()(
 
   val runtime = zio.Runtime.default
 
-//  val zioStandardApp: ZIO[Any, IOException, Unit] =
-//    zio.Console.printLine("Hello, World 2!!!")
-//      .repeatN(1)
-//
-//  Unsafe.unsafe { implicit unsafe =>
-//    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
-//  }
+  val zioStandardApp =
+    zio.Console.printLine("Hello!")
+      .repeatN(1)
+
+  Unsafe.unsafe { implicit unsafe =>
+    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
+  }
 
 //  val streamApp: ZStream[Any, Throwable, String] =
 //    ZStream
@@ -53,8 +50,8 @@ class JobsZio @Inject()(
 //    runtime.unsafe.run(streamApp.foreach(printLine(_))).getOrThrowFiberFailure()
 //  }
 
-  def create(jobDescription: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    jobsQueue.addOne(jobDescription)
-    Ok(s"creating job $jobDescription")
+  def create(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    for (i <- 1 to 8) jobsQueue.addOne(i.toString)
+    Ok(s"enqueued jobs")
   }
 }
