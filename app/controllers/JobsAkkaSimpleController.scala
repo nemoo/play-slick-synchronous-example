@@ -10,11 +10,11 @@ import javax.inject.{Inject, Singleton}
 class JobsAkkaSimpleController @Inject()(val controllerComponents: ControllerComponents,
                                    actorSystem: ActorSystem) extends BaseController {
 
-  class JobExecutor @Inject() extends Actor {
+  class JobExecutor extends Actor {
     override def receive: Receive = {
       case id: Int =>
-        println(s"start " + "  " * id + id)
-        Thread.sleep(3000)
+        println(s"a " + "  " * id + id)
+        Thread.sleep(1000)
       //      println(s"end   " + "  " * id + id)
     }
   }

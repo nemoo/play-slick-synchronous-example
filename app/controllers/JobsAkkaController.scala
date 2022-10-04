@@ -20,7 +20,7 @@ class JobsAkkaController @Inject()(val controllerComponents: ControllerComponent
   * dispatches incoming jobs to n actors, making sure that only n jobs are being processed at a time
   */
 class JobRouterActor @Inject() extends Actor {
-  val parallelActors = 3
+  val parallelActors = 2
   val jobRouter: Router = Router(
     SmallestMailboxRoutingLogic(),
     for (_ <- 1 to parallelActors) yield ActorRefRoutee(context.actorOf(Props(new JobExecutor)))
@@ -31,8 +31,8 @@ class JobRouterActor @Inject() extends Actor {
 class JobExecutor @Inject() extends Actor {
   override def receive: Receive = {
     case id: Int =>
-      println(s"start " + "  " * id + id)
-      Thread.sleep(3000)
+      println(s"a " + "  " * id + id)
+      Thread.sleep(1000)
 //      println(s"end   " + "  " * id + id)
   }
 }

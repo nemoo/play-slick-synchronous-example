@@ -33,22 +33,31 @@ class JobsZioController @Inject()( val controllerComponents: ControllerComponent
 
   val runtime = zio.Runtime.default
 
-  val zioStandardApp =
-    zio.Console.printLine("Hello!")
-      .repeatN(1)
-
-  Unsafe.unsafe { implicit unsafe =>
-    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
-  }
-
-//  val streamApp: ZStream[Any, Throwable, String] =
-//    ZStream
-//      .fromIterator(jobsIterator)
-//      .schedule(Schedule.spaced(1.second))
+//  val zioStandardApp =
+//    zio.Console.printLine("Hello!")
+//      .repeatN(1)
 //
 //  Unsafe.unsafe { implicit unsafe =>
-//    runtime.unsafe.run(streamApp.foreach(printLine(_))).getOrThrowFiberFailure()
+//    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
 //  }
+
+  val zstream: ZStream[Any, Throwable, Int] =
+    ZStream
+      .fromIterator((1 to 8).iterator)
+//      .schedule(Schedule.spaced(1.second))
+      .mapZIOPar(2){x =>
+        ZIO.attemptBlocking{
+          Thread.sleep(1000)
+          x
+        }
+      }
+
+  val streamApp: ZIO[Any, Throwable, Unit] =
+    zstream.foreach(item => printLine(s"z  $item"))
+
+  Unsafe.unsafe { implicit unsafe =>
+    runtime.unsafe.run(streamApp).getOrThrowFiberFailure()
+  }
 
   def create(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     for (i <- 1 to 8) jobsQueue.addOne(i.toString)
