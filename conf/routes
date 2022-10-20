@@ -1,3 +1,4 @@
 
 GET     /                         controllers.JobsAkkaController.create()
+GET     /s                        controllers.JobsAkkaSimpleController.create()
 GET     /z                        controllers.JobsZioController.create()

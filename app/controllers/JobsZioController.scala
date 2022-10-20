@@ -2,7 +2,10 @@ package controllers
 
 import play.api.mvc._
 import zio.Console.printLine
-import zio.{Schedule, ZIO, durationInt}
+import zio.{Chunk, Schedule, ZIO, durationInt}
+
+import java.io.{InputStream, OutputStream}
+import scala.collection.mutable
 //import play.api.mvc._
 import zio.Unsafe
 import zio.stream.ZStream
@@ -12,39 +15,16 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class JobsZioController @Inject()( val controllerComponents: ControllerComponents ) extends BaseController {
 
-  val jobsIteratorOld: Iterator[String] = new Iterator[String] {
-    var count = 0
-    override def hasNext: Boolean = count <= 2
-    override def next(): String = {
-      count += 1
-      "yes"
-    }
+  def create(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    for (i <- 1 to 8) println(s"I want to put item $i into the zio stream")
+    Ok(s"enqueued zio jobs")
   }
-
-  val jobsQueue = scala.collection.mutable.Queue[String]()
-
-  val jobsIterator: Iterator[String] = new Iterator[String] {
-//    override def hasNext: Boolean = jobsQueue.nonEmpty
-    override def hasNext: Boolean = true
-//    override def next(): String = jobsQueue.dequeue()
-    override def next(): String = "ja"
-  }
-
 
   val runtime = zio.Runtime.default
-
-//  val zioStandardApp =
-//    zio.Console.printLine("Hello!")
-//      .repeatN(1)
-//
-//  Unsafe.unsafe { implicit unsafe =>
-//    runtime.unsafe.run(zioStandardApp).getOrThrowFiberFailure()
-//  }
 
   val zstream: ZStream[Any, Throwable, Int] =
     ZStream
       .fromIterator((1 to 8).iterator)
-//      .schedule(Schedule.spaced(1.second))
       .mapZIOPar(2){x =>
         ZIO.attemptBlocking{
           Thread.sleep(1000)
@@ -59,8 +39,4 @@ class JobsZioController @Inject()( val controllerComponents: ControllerComponent
     runtime.unsafe.run(streamApp).getOrThrowFiberFailure()
   }
 
-  def create(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    for (i <- 1 to 8) jobsQueue.addOne(i.toString)
-    Ok(s"enqueued jobs")
-  }
 }
