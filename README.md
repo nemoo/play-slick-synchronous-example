@@ -1,0 +1,3 @@
+- [trigger JobsAkkaController](http://localhost:9000/)
+- [trigger JobsAkkaSimpleController](http://localhost:9000/s)
+- [trigger JobsZioController](http://localhost:9000/z)
