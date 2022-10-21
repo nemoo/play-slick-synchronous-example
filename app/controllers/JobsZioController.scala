@@ -2,11 +2,8 @@ package controllers
 
 import play.api.mvc._
 import zio.Console.printLine
-import zio.{Chunk, Schedule, ZIO, durationInt}
-
-import java.io.{InputStream, OutputStream}
-import scala.collection.mutable
-//import play.api.mvc._
+import zio.ZIO
+import zio.stream.ZPipeline
 import zio.Unsafe
 import zio.stream.ZStream
 
@@ -15,20 +12,20 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class JobsZioController @Inject()( val controllerComponents: ControllerComponents ) extends BaseController {
 
-  def create(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    for (i <- 1 to 8) println(s"I want to put item $i into the zio stream")
-    Ok(s"enqueued zio jobs")
+  def create(input: Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    zstream.write(3) //apparently such a write function does not exist
+    Ok(s"enqueued input $input")
   }
 
   val runtime = zio.Runtime.default
 
   val zstream: ZStream[Any, Throwable, Int] =
     ZStream
-      .fromIterator((1 to 8).iterator)
-      .mapZIOPar(2){x =>
+      .map{x =>
         ZIO.attemptBlocking{
+          // here some expensive blocking code is running
           Thread.sleep(1000)
-          x
+          x * 2
         }
       }
 
