@@ -3,7 +3,7 @@ package models
 import javax.inject.Inject
 
 import play.api.db.slick.DatabaseConfigProvider
-import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
+import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 
 
 /**

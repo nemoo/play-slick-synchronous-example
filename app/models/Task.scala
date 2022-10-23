@@ -1,13 +1,11 @@
 package models
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.db.slick.DatabaseConfigProvider
-import com.github.takezoe.slick.blocking.BlockingH2Driver.blockingApi._
-import Implicits._
+import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import models.Implicits._
 import play.api.cache.AsyncCacheApi
-import slick.dbio.Effect
-import slick.sql.FixedSqlAction
+import play.api.db.slick.DatabaseConfigProvider
+
+import javax.inject.{Inject, Singleton}
 
 
 
@@ -21,9 +19,9 @@ case class Task(id: Long, color: String, status: TaskStatus.Value, project: Long
 }
 
 object TaskStatus extends Enumeration {
-  val ready = Value("ready")
-  val set = Value("set")
-  val go = Value("go")
+  val ready: TaskStatus.Value = Value("ready")
+  val set: TaskStatus.Value = Value("set")
+  val go: TaskStatus.Value = Value("go")
 }
 
 @Singleton
@@ -54,7 +52,7 @@ class TaskRepo @Inject()(cache: AsyncCacheApi)
       .update(task.patch(color, status, project))
   }
 
-  def all()(implicit session: Session): Seq[Task] =
+  def all(implicit session: Session): Seq[Task] =
     Tasks.list
 
   def insert(task: Task)(implicit session: Session): Long =
@@ -71,12 +69,12 @@ class TaskRepo @Inject()(cache: AsyncCacheApi)
 
 }
 
-private class TasksTable(tag: Tag) extends Table[Task](tag, "TASK") {
+private class TasksTable(tag: Tag) extends Table[Task](tag, "task") {
 
-  def id = column[Long]("ID", O.AutoInc, O.PrimaryKey)
-  def color = column[String]("COLOR")
-  def status = column[TaskStatus.Value]("STATUS")
-  def project = column[Long]("PROJECT")
+  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
+  def color = column[String]("color")
+  def status = column[TaskStatus.Value]("status")
+  def project = column[Long]("project")
 
   def * = (id, color, status, project) <> (Task.tupled, Task.unapply)
   def ? = (id.?, color.?, status.?, project.?).shaped.<>({ r => import r._; _1.map(_ => Task.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))

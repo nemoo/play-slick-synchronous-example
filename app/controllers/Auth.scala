@@ -1,35 +1,36 @@
 package controllers
 
-import javax.inject.Inject
-import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, LogoutEvent, Silhouette}
-import com.mohiva.play.silhouette.api.actions.SecuredRequest
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
+import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
 import com.mohiva.play.silhouette.api.util.Credentials
+import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, LogoutEvent, Silhouette}
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import play.api.Logger
 import play.api.data.Form
-import play.api.mvc._
 import play.api.data.Forms._
-import utils.auth.{AuthEnv, AuthenticatorServiceImpl, UserService}
-import utils.Config
+import play.api.mvc._
+import util.auth.{AuthEnv, AuthenticatorServiceImpl, UserService}
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class Auth @Inject() (
-  val controllerComponents: ControllerComponents,
-  authenticator: AuthenticatorServiceImpl,
-  userService: UserService,
-  config: utils.Config,
-  val silhouette: Silhouette[AuthEnv])(
+                       val controllerComponents: ControllerComponents,
+                       authenticator: AuthenticatorServiceImpl,
+                       userService: UserService,
+                       config: util.Config,
+                       val silhouette: Silhouette[AuthEnv])(
   val ex: ExecutionContext)
 extends BaseController {
 
   val logger: Logger = Logger(this.getClass)
 
-  def signin: Action[AnyContent] = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
-    Ok(views.html.signin(config = config))
+  def signin: Action[AnyContent] = silhouette.UserAwareAction { implicit request: UserAwareRequest[AuthEnv, AnyContent] =>
+    if (request.identity.isDefined)
+      Redirect(routes.Application.listProjects)
+    else
+      Ok(views.html.signin(config = config))
   }
 
   val signInForm: Form[Credentials] = Form(mapping(
@@ -39,7 +40,7 @@ extends BaseController {
 
   def authenticate: Action[AnyContent] = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
 //    Redirect(controllers.routes.Application.listProjects())
-    signInForm.bindFromRequest.fold(
+    signInForm.bindFromRequest().fold(
       //      formWithErrors => Future.successful(Redirect(controllers.routes.Auth.signin().toString)),
       formWithErrors => Future.successful(Ok("Error")),
       formData => {

@@ -3,7 +3,7 @@ package modules
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 import play.api.{Configuration, Environment, Mode}
-import utils._
+import util._
 
 
 class ApplicationModule( environment: Environment,

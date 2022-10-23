@@ -1,4 +1,4 @@
-package utils.errorhandler
+package util.errorhandler
 
 import com.mohiva.play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
 import play.api.Logger
