@@ -9,8 +9,7 @@ import util._
 class ApplicationModule( environment: Environment,
                          configuration: Configuration) extends AbstractModule with ScalaModule{
   override def configure(): Unit = {
-    bind[DbBootstrap].self.asEagerSingleton()
-    
+
     if (environment.mode == Mode.Prod)
       bind[WeatherService].to[WeatherServiceImpl]
     else

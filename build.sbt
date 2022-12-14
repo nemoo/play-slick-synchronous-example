@@ -16,15 +16,11 @@ resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 resolvers += Resolver.jcenterRepo
 
 
-libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.0.0"
-libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.40.11" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.40.11" % "test"
 
-libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
-libraryDependencies += "org.postgresql" % "postgresql" % "42.5.0"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
@@ -50,4 +46,5 @@ val generateSha1: Unit =  {
 }
 
 //enable displaying of link to intellij in error page
+//fork := true // required for "sbt run" to pick up javaOptions
 javaOptions += "-Dplay.editor=http://localhost:63342/api/file/?file=%s&line=%s"
