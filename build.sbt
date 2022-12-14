@@ -15,7 +15,8 @@ lazy val root = (project in file("."))
   .aggregate(core)
   .dependsOn(core)
 
-scalaVersion := "2.13.10"
+Global / scalaVersion := "2.13.10"  // global since also for sub-projects!
+//scalaVersion := "2.13.10"
 
 routesGenerator := InjectedRoutesGenerator
 

@@ -9,6 +9,7 @@ import com.mohiva.play.silhouette.api.actions._
 import play.Environment
 import util.{Config, WeatherService}
 import util.auth.{AuthEnv, User}
+import core.Logic
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -27,8 +28,9 @@ class Application @Inject()(
   
 
 
-  def test: Action[AnyContent] = silhouette.UnsecuredAction { implicit request: Request[AnyContent] =>
-    Ok("test")
+  def test: Action[AnyContent] = silhouette.UserAwareAction { implicit request: Request[AnyContent] =>
+
+    Ok("test" + Logic.greeting)
   }
 
   def addTaskToProject(color: String, projectId: Long): Action[AnyContent] = silhouette.SecuredAction { implicit request: SecuredRequest[AuthEnv, AnyContent] =>
