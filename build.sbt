@@ -4,7 +4,16 @@ name := """play-slick-example"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val core = (project in file("core"))
+
+lazy val cli = (project in file("cli"))
+  .aggregate(core)
+  .dependsOn(core)
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
+  .aggregate(core)
+  .dependsOn(core)
 
 scalaVersion := "2.13.10"
 
