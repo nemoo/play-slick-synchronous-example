@@ -11,7 +11,6 @@ GET     /projects/list                       controllers.Application.listProject
 GET     /projects/:id/delete                 controllers.Application.delete(id: Long)
 GET     /projects/:id                        controllers.Application.projects(id: Long)
 PUT     /projects/:id/:name                  controllers.Application.addTaskToProject(name: String, id: Long)
-PATCH   /tasks/:id                           controllers.Application.modifyTask(id: Long, color:Option[String] ?= None)
 
 GET     /admin                               controllers.Admin.overview
 

@@ -2,55 +2,45 @@ package models
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.db.slick.DatabaseConfigProvider
-import slick.dbio
-import slick.dbio.Effect.Read
-import slick.driver.JdbcProfile
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import scala.collection.mutable.ListBuffer
 
 
 case class Project(id: Long, name: String)
 
 @Singleton
-class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: DatabaseConfigProvider) extends DAO {
+class ProjectRepo @Inject()(taskRepo: TaskRepo) {
 
-  def findById(id: Long)(implicit session: Session): Option[Project] =
-    Projects.filter(_.id === id)
-      .firstOption
+  val Projects: ListBuffer[Project] = collection.mutable.ListBuffer(
+    Project(1,"A"),
+    Project(2,"B"),
+  )
 
-  def findByName(name: String)(implicit session: Session): List[Project] =
-    Projects.filter(_.name === name)
-      .list
+  def findById(id: Long): Option[Project] =
+    Projects.find(_.id == id)
 
-  def all(implicit session: Session): List[Project] =
-    Projects.list
+  def findByName(name: String): List[Project] =
+    Projects.filter(_.name == name)
+      .toList
 
-  def create(name: String)(implicit session: Session): Long = {
-    val project = Project(0, name)
-    (Projects returning Projects.map(_.id))
-      .insert(project)
+  def all: List[Project] =
+    Projects.toList
+
+  def create(name: String): Long = {
+    val project = Project(Projects.map(_.id).max + 1, name)
+    Projects += project
+    project.id
   }
 
-  def delete(id: Long)(implicit session: Session): Unit = {
+  def delete(id: Long): Unit = {
     val projects = findById(id)
 
-    projects.map(p => taskRepo._deleteAllInProject(p.id))
+    projects.foreach(p => taskRepo._deleteAllInProject(p.id))
 
-    Projects.filter(_.id === id)
-      .delete
+    Projects.filterInPlace(_.id != id)
   }
 
-  def addTask(color: String, projectId: Long)(implicit session: Session): Long = {
+  def addTask(color: String, projectId: Long): Long = {
     val project = findById(projectId).get
     taskRepo.insert(Task(0, color, TaskStatus.ready, project.id))
   }
-}
-
-class ProjectsTable(tag: Tag) extends Table[Project](tag, "project") {
-
-  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
-  def name = column[String]("name")
-
-  def * = (id, name) <> (Project.tupled, Project.unapply)
-  def ? = (id.?, name.?).shaped.<>({ r => import r._; _1.map(_ => Project.tupled((_1.get, _2.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
 }

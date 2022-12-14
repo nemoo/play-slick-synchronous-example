@@ -1,22 +1,13 @@
 package models
 
-import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
-import models.Implicits._
 import play.api.cache.AsyncCacheApi
-import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.{Inject, Singleton}
+import scala.collection.mutable.ListBuffer
 
 
 
-case class Task(id: Long, color: String, status: TaskStatus.Value, project: Long) {
-
-  def patch(color: Option[String], status: Option[TaskStatus.Value], project: Option[Long]): Task =
-    this.copy(color = color.getOrElse(this.color),
-              status = status.getOrElse(this.status),
-              project = project.getOrElse(this.project))
-
-}
+case class Task(id: Long, color: String, status: TaskStatus.Value, project: Long)
 
 object TaskStatus extends Enumeration {
   val ready: TaskStatus.Value = Value("ready")
@@ -25,58 +16,39 @@ object TaskStatus extends Enumeration {
 }
 
 @Singleton
-class TaskRepo @Inject()(cache: AsyncCacheApi)
-                        (protected val dbConfigProvider: DatabaseConfigProvider) extends DAO{
+class TaskRepo @Inject()(cache: AsyncCacheApi) {
 
-  def findById(id: Long)(implicit session: Session): Task =
-    Tasks.filter(_.id === id)
-      .first
+  val Tasks: ListBuffer[Task] = collection.mutable.ListBuffer(
+    Task(1, "blue", TaskStatus.ready, 0),
+    Task(2, "green", TaskStatus.set, 1),
+  )
 
-  def findByColor(color: String)(implicit session: Session): Option[Task] =
-    Tasks.filter(_.color === color)
-      .firstOption
+  def findById(id: Long): Task =
+    Tasks.filter(_.id == id)
+      .head
 
-  def findByProjectId(projectId: Long)(implicit session: Session): List[Task] =
-    Tasks.filter(_.project === projectId)
-      .list
+  def findByColor(color: String): Option[Task] =
+    Tasks.find(_.color == color)
 
-  def findByReadyStatus(implicit session: Session): List[Task] =
-    Tasks.filter(_.status === TaskStatus.ready)
-      .list
+  def findByProjectId(projectId: Long): List[Task] =
+    Tasks.filter(_.project == projectId)
+      .toList
 
+  def findByReadyStatus: List[Task] =
+    Tasks.filter(_.status == TaskStatus.ready)
+      .toList
 
-  def partialUpdate(id: Long, color: Option[String], status: Option[TaskStatus.Value], project: Option[Long])(implicit session: Session): Int = {
+  def all: Seq[Task] =
+    Tasks.toSeq
 
-    val task = findById(id)
-    Tasks.filter(_.id === id)
-      .update(task.patch(color, status, project))
+  def insert(task: Task): Long ={
+    val newTask = task.copy(id = Tasks.map(_.id).max + 1)
+    Tasks += newTask
+    newTask.id
   }
 
-  def all(implicit session: Session): Seq[Task] =
-    Tasks.list
-
-  def insert(task: Task)(implicit session: Session): Long =
-    (Tasks returning Tasks.map(_.id))
-      .insert(task)
-
-  def insertOrUpdate(task: Task)(implicit session: Session): Unit =
-    (Tasks returning Tasks.map(_.id))
-      .insertOrUpdate(task)
-
-  def _deleteAllInProject(projectId: Long)(implicit session: Session): Int =
-    Tasks.filter(_.project === projectId)
-      .delete
-
+  def _deleteAllInProject(projectId: Long): Unit =
+    Tasks.filterInPlace(_.project == projectId)
 }
 
-private class TasksTable(tag: Tag) extends Table[Task](tag, "task") {
-
-  def id = column[Long]("id", O.AutoInc, O.PrimaryKey)
-  def color = column[String]("color")
-  def status = column[TaskStatus.Value]("status")
-  def project = column[Long]("project")
-
-  def * = (id, color, status, project) <> (Task.tupled, Task.unapply)
-  def ? = (id.?, color.?, status.?, project.?).shaped.<>({ r => import r._; _1.map(_ => Task.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
-}
 
