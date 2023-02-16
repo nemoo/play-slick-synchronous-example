@@ -24,7 +24,7 @@ libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.4
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.40.11" % "test"
 
 libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
-libraryDependencies += "org.postgresql" % "postgresql" % "42.5.3"
+libraryDependencies += "org.postgresql" % "postgresql" % "42.5.4"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
 libraryDependencies += ehcache
