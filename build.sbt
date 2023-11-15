@@ -6,7 +6,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.12"
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -19,7 +19,7 @@ resolvers += Resolver.jcenterRepo
 libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % "test"
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.0" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.40.15" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.40.15" % "test"
 
