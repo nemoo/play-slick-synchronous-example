@@ -4,7 +4,7 @@
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.18")
 
-addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.18")
+addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.20")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.13")
 addSbtPlugin("com.github.sbt" % "sbt-web" % "1.5.1")
