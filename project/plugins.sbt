@@ -9,5 +9,5 @@ addSbtPlugin("com.jamesward" %% "play-auto-refresh" % "0.0.18")
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.13")
 addSbtPlugin("com.github.sbt" % "sbt-web" % "1.5.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
-addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
+addSbtPlugin("com.github.sbt" % "sbt-gzip" % "2.0.0")
 
