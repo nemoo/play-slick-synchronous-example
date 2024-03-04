@@ -10,12 +10,6 @@ scalaVersion := "2.13.12"
 
 routesGenerator := InjectedRoutesGenerator
 
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
-//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/releases/"
-resolvers += Resolver.jcenterRepo
-
-
 libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
