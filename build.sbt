@@ -37,7 +37,7 @@ libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette" % "
 libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-password-bcrypt" % "7.0.4"
 libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-persistence" % "7.0.4"
 libraryDependencies += "io.github.honeycomb-cheesecake" %% "play-silhouette-crypto-jca" % "7.0.4"
-libraryDependencies += "net.codingwell" %% "scala-guice" % "7.0.0"
+libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.6"
 libraryDependencies += "com.iheart" %% "ficus" % "1.5.1"
 
 val generateSha1: Unit =  {
