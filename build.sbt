@@ -21,6 +21,7 @@ libraryDependencies += "com.github.takezoe" %% "blocking-slick-33" % "0.0.13"
 libraryDependencies += "org.postgresql" % "postgresql" % "42.5.3"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice
+libraryDependencies += ws
 libraryDependencies += ehcache
 libraryDependencies += "org.webjars" % "bootstrap" % "5.2.2"
 libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.8.0"
