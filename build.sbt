@@ -1,3 +1,4 @@
+import scala.collection.Seq
 import scala.sys.process.Process
 
 name := """play-slick-example"""
@@ -25,7 +26,7 @@ libraryDependencies += ws
 libraryDependencies += caffeine
 libraryDependencies += "org.webjars" % "bootstrap" % "5.3.2"
 libraryDependencies += "org.webjars.npm" % "bootstrap-icons" % "1.10.5"
-libraryDependencies += "org.webjars" % "popper.js" % "1.12.9-1"
+libraryDependencies += "org.webjars" % "popper.js" % "2.9.3"
 libraryDependencies += "org.webjars" % "jquery" % "3.6.4"
 libraryDependencies += "org.webjars" % "momentjs" % "2.29.1"
 libraryDependencies += "org.playframework.silhouette" %% "play-silhouette" % "10.0.0"
@@ -34,6 +35,10 @@ libraryDependencies += "org.playframework.silhouette" %% "play-silhouette-persis
 libraryDependencies += "org.playframework.silhouette" %% "play-silhouette-crypto-jca" % "10.0.0"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "6.0.0"
 libraryDependencies += "com.iheart" %% "ficus" % "1.4.7"
+
+ThisBuild / libraryDependencySchemes ++= Seq(
+  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+)
 
 val generateSha1: Unit =  {
   val sha1 = try {
