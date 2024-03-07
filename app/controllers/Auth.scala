@@ -1,9 +1,9 @@
 package controllers
 
-import com.mohiva.play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
-import com.mohiva.play.silhouette.api.util.Credentials
-import com.mohiva.play.silhouette.api.{LoginEvent, LoginInfo, LogoutEvent, Silhouette}
-import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
+import play.silhouette.api.actions.{SecuredRequest, UserAwareRequest}
+import play.silhouette.api.util.Credentials
+import play.silhouette.api.{LoginEvent, LoginInfo, LogoutEvent, Silhouette}
+import play.silhouette.impl.exceptions.IdentityNotFoundException
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._

@@ -1,16 +1,16 @@
 package modules
 
 import com.google.inject.{AbstractModule, Provides}
-import com.mohiva.play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
-import com.mohiva.play.silhouette.api.crypto._
-import com.mohiva.play.silhouette.api.services.{AuthenticatorService, IdentityService}
-import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
-import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticator, _}
-import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
-import com.mohiva.play.silhouette.password.BCryptPasswordHasher
-import com.mohiva.play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
+import play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
+import play.silhouette.api.crypto._
+import play.silhouette.api.services.{AuthenticatorService, IdentityService}
+import play.silhouette.api.util._
+import play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
+import play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
+import play.silhouette.impl.authenticators.{CookieAuthenticator, _}
+import play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
+import play.silhouette.password.BCryptPasswordHasher
+import play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.ceedubs.ficus.readers.ValueReader

@@ -1,7 +1,7 @@
 package util.auth
 
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.services.IdentityService
+import play.silhouette.api.LoginInfo
+import play.silhouette.api.services.IdentityService
 import play.api.Logger
 
 import scala.concurrent.Future

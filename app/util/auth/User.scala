@@ -1,6 +1,6 @@
 package util.auth
 
-import com.mohiva.play.silhouette.api.Identity
+import play.silhouette.api.Identity
 
 case class User(
                  login: String,

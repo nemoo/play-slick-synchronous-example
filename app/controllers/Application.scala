@@ -4,9 +4,9 @@ import javax.inject.{Inject, Singleton}
 import models.{ProjectRepo, TaskRepo}
 import play.api.mvc._
 import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
-import com.mohiva.play.silhouette
-import com.mohiva.play.silhouette.api.Silhouette
-import com.mohiva.play.silhouette.api.actions._
+import play.silhouette
+import play.silhouette.api.Silhouette
+import play.silhouette.api.actions._
 import play.Environment
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile

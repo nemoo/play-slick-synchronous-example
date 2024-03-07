@@ -1,8 +1,8 @@
 package controllers
 
 import javax.inject.Inject
-import com.mohiva.play.silhouette.api.Silhouette
-import com.mohiva.play.silhouette.api.actions._
+import play.silhouette.api.Silhouette
+import play.silhouette.api.actions._
 import models.{ProjectRepo, TaskRepo}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._
