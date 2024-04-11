@@ -1,8 +1,8 @@
-Play 2.8, Synchronous Slick 5 
+Play 3, Blocking Slick Example
 ==================
 [![Build Status](https://travis-ci.com/nemoo/play-slick-synchronous-example.svg?branch=main)](https://travis-ci.com/nemoo/play-slick-synchronous-example)
 
-An example app using Play Framework 3, Slick 5
+An example app using Play Framework 3 and blocking-slick.
 
 To use slick in the most simple, synchronous way, this project uses the great [blocking-slick api](https://github.com/takezoe/blocking-slick).     
 
