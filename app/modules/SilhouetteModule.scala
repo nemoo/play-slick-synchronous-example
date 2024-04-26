@@ -11,22 +11,21 @@ import play.silhouette.impl.authenticators.{CookieAuthenticator, _}
 import play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import play.silhouette.password.BCryptPasswordHasher
 import play.silhouette.persistence.daos.{DelegableAuthInfoDAO, InMemoryAuthInfoDAO}
-import net.ceedubs.ficus.Ficus._
-import net.ceedubs.ficus.readers.ArbitraryTypeReader._
-import net.ceedubs.ficus.readers.ValueReader
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
-import com.typesafe.config.Config
 import play.api.mvc.{Cookie, CookieHeaderEncoding}
 import util.auth.{AuthEnv, User, UserService}
 import util.errorhandler.SecurityErrorHandler
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.util.Try
 
-
-
+/**
+  * Guice bindings for silhouette cookie authentication that is used
+  * in the composer GUI for humans
+  */
 class SilhouetteModule extends AbstractModule with ScalaModule{
-
 
   override def configure(): Unit = {
     bind[Silhouette[AuthEnv]].to[SilhouetteProvider[AuthEnv]]
@@ -73,17 +72,32 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
                                    configuration: Configuration,
                                    clock: Clock): AuthenticatorService[CookieAuthenticator] = {
 
-    implicit val sameSiteReader: ValueReader[Option[Option[Cookie.SameSite]]] =
-      (config: Config, path: String) =>
-        if (config.hasPathOrNull(path))
-          if (config.getIsNull(path)) Some(None)
-          else Some(Cookie.SameSite.parse(config.getString(path)))
-        else None
+    val silhouetteConfig = configuration.underlying.getConfig("silhouette.authenticator")
 
-    val config: CookieAuthenticatorSettings = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
+    val cookieAuthSettings = CookieAuthenticatorSettings(
+      cookieName = "id",
+      cookiePath = "/",
+      cookieDomain = None,
+      secureCookie = silhouetteConfig.getBoolean("secureCookie"),
+      httpOnlyCookie = silhouetteConfig.getBoolean("httpOnlyCookie"),
+      sameSite = if (silhouetteConfig.hasPath("sameSite")) Cookie.SameSite.parse(silhouetteConfig.getString("sameSite")) else Some(Cookie.SameSite.Lax),
+      useFingerprinting = true,
+      cookieMaxAge = if (silhouetteConfig.hasPath("cookieMaxAge")) Some(Duration(silhouetteConfig.getString("cookieMaxAge")).asInstanceOf[FiniteDuration]) else None,
+      authenticatorIdleTimeout = if (silhouetteConfig.hasPath("authenticatorIdleTimeout")) Some(Duration(silhouetteConfig.getString("authenticatorIdleTimeout")).asInstanceOf[FiniteDuration]) else None,
+      authenticatorExpiry = Duration(silhouetteConfig.getString("authenticatorExpiry")).asInstanceOf[FiniteDuration]
+    )
+
     val authenticatorEncoder: CrypterAuthenticatorEncoder = new CrypterAuthenticatorEncoder(crypter)
 
-    new CookieAuthenticatorService(config, None, signer, cookieHeaderEncoding, authenticatorEncoder, fingerprintGenerator, idGenerator, clock)
+    new CookieAuthenticatorService(
+      settings = cookieAuthSettings,
+      repository = None,
+      signer = signer,
+      cookieHeaderEncoding = cookieHeaderEncoding,
+      authenticatorEncoder = authenticatorEncoder,
+      fingerprintGenerator = fingerprintGenerator,
+      idGenerator = idGenerator,
+      clock = clock)
   }
 
 
@@ -95,7 +109,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
     */
   @Provides
   def provideAuthenticatorCookieSigner(configuration: Configuration): JcaSigner = {
-    val config: JcaSignerSettings = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.signer")
+    val config: JcaSignerSettings = JcaSignerSettings(configuration.underlying.getString("silhouette.authenticator.signer.key"))
     new JcaSigner(config)
   }
 
@@ -107,7 +121,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule{
     */
   @Provides
   def provideAuthenticatorCrypter(configuration: Configuration): JcaCrypter = {
-    val config: JcaCrypterSettings = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
+    val config: JcaCrypterSettings = JcaCrypterSettings(configuration.underlying.getString("silhouette.authenticator.crypter.key"))
     new JcaCrypter(config)
   }
 }
