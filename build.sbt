@@ -11,14 +11,14 @@ scalaVersion := "2.13.12"
 
 routesGenerator := InjectedRoutesGenerator
 
-libraryDependencies += "com.typesafe.play" %% "play-slick" % "5.1.0"
-libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "5.1.0"
+libraryDependencies += "org.playframework" %% "play-slick" % "6.1.0"
+libraryDependencies += "org.playframework" %% "play-slick-evolutions" % "6.1.0"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.9.2"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.0" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.40.15" % "test"
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.40.15" % "test"
 
-libraryDependencies += "com.github.takezoe" %% "blocking-slick" % "0.0.14"
+libraryDependencies += "com.github.takezoe" %% "blocking-slick" % "0.0.15-RC1"
 libraryDependencies += "org.postgresql" % "postgresql" % "42.5.3"
 libraryDependencies += specs2 % Test
 libraryDependencies += guice

@@ -1,12 +1,11 @@
 package models
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio
 import slick.dbio.Effect.Read
-import slick.driver.JdbcProfile
 import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
+import slick.jdbc.JdbcBackend
 
 
 case class Project(id: Long, name: String)
@@ -14,24 +13,24 @@ case class Project(id: Long, name: String)
 @Singleton
 class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: DatabaseConfigProvider) extends DAO {
 
-  def findById(id: Long)(implicit session: Session): Option[Project] =
+  def findById(id: Long)(implicit session: JdbcBackend#Session): Option[Project] =
     Projects.filter(_.id === id)
       .firstOption
 
-  def findByName(name: String)(implicit session: Session): List[Project] =
+  def findByName(name: String)(implicit session: JdbcBackend#Session): List[Project] =
     Projects.filter(_.name === name)
       .list
 
-  def all(implicit session: Session): List[Project] =
+  def all(implicit session: JdbcBackend#Session): List[Project] =
     Projects.list
 
-  def create(name: String)(implicit session: Session): Long = {
+  def create(name: String)(implicit session: JdbcBackend#Session): Long = {
     val project = Project(0, name)
     (Projects returning Projects.map(_.id))
       .insert(project)
   }
 
-  def delete(id: Long)(implicit session: Session): Unit = {
+  def delete(id: Long)(implicit session: JdbcBackend#Session): Unit = {
     val projects = findById(id)
 
     projects.map(p => taskRepo._deleteAllInProject(p.id))
@@ -40,7 +39,7 @@ class ProjectRepo @Inject()(taskRepo: TaskRepo)(protected val dbConfigProvider: 
       .delete
   }
 
-  def addTask(color: String, projectId: Long)(implicit session: Session): Long = {
+  def addTask(color: String, projectId: Long)(implicit session: JdbcBackend#Session): Long = {
     val project = findById(projectId).get
     taskRepo.insert(Task(0, color, TaskStatus.ready, project.id))
   }

@@ -4,6 +4,7 @@ import com.github.takezoe.slick.blocking.BlockingPostgresDriver.blockingApi._
 import models.Implicits._
 import play.api.cache.AsyncCacheApi
 import play.api.db.slick.DatabaseConfigProvider
+import slick.jdbc.JdbcBackend
 
 import javax.inject.{Inject, Singleton}
 
@@ -28,42 +29,42 @@ object TaskStatus extends Enumeration {
 class TaskRepo @Inject()(cache: AsyncCacheApi)
                         (protected val dbConfigProvider: DatabaseConfigProvider) extends DAO{
 
-  def findById(id: Long)(implicit session: Session): Task =
+  def findById(id: Long)(implicit session: JdbcBackend#Session): Task =
     Tasks.filter(_.id === id)
       .first
 
-  def findByColor(color: String)(implicit session: Session): Option[Task] =
+  def findByColor(color: String)(implicit session: JdbcBackend#Session): Option[Task] =
     Tasks.filter(_.color === color)
       .firstOption
 
-  def findByProjectId(projectId: Long)(implicit session: Session): List[Task] =
+  def findByProjectId(projectId: Long)(implicit session: JdbcBackend#Session): List[Task] =
     Tasks.filter(_.project === projectId)
       .list
 
-  def findByReadyStatus(implicit session: Session): List[Task] =
+  def findByReadyStatus(implicit session: JdbcBackend#Session): List[Task] =
     Tasks.filter(_.status === TaskStatus.ready)
       .list
 
 
-  def partialUpdate(id: Long, color: Option[String], status: Option[TaskStatus.Value], project: Option[Long])(implicit session: Session): Int = {
+  def partialUpdate(id: Long, color: Option[String], status: Option[TaskStatus.Value], project: Option[Long])(implicit session: JdbcBackend#Session): Int = {
 
     val task = findById(id)
     Tasks.filter(_.id === id)
       .update(task.patch(color, status, project))
   }
 
-  def all(implicit session: Session): Seq[Task] =
+  def all(implicit session: JdbcBackend#Session): Seq[Task] =
     Tasks.list
 
-  def insert(task: Task)(implicit session: Session): Long =
+  def insert(task: Task)(implicit session: JdbcBackend#Session): Long =
     (Tasks returning Tasks.map(_.id))
       .insert(task)
 
-  def insertOrUpdate(task: Task)(implicit session: Session): Unit =
+  def insertOrUpdate(task: Task)(implicit session: JdbcBackend#Session): Unit =
     (Tasks returning Tasks.map(_.id))
       .insertOrUpdate(task)
 
-  def _deleteAllInProject(projectId: Long)(implicit session: Session): Int =
+  def _deleteAllInProject(projectId: Long)(implicit session: JdbcBackend#Session): Int =
     Tasks.filter(_.project === projectId)
       .delete
 
