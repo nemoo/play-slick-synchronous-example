@@ -25,7 +25,7 @@ class ModelScalaTestSpec extends PlaySpec with GuiceOneAppPerTest with ForEachTe
 
   override def fakeApplication(): Application = {
     val app = TestContainersPostgreSQLApplicationFactory.produceApplication(container)
-    db = app.injector.instanceOf[DatabaseConfigProvider].get[JdbcProfile].db
+    db = app.injector.instanceOf[DatabaseConfigProvider].get[JdbcProfile].db.asInstanceOf[Database]
     projectRepo = app.injector.instanceOf[ProjectRepo]
     app
   }

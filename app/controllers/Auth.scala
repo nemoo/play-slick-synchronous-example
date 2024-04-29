@@ -33,10 +33,12 @@ extends BaseController {
       Ok(views.html.signin(config = config))
   }
 
+  def credentialsUnapply(credentials: Credentials): Option[(String, String)] = Some((credentials.identifier, credentials.password))
+
   val signInForm: Form[Credentials] = Form(mapping(
     "login" -> nonEmptyText,
     "password" -> nonEmptyText
-  )(Credentials.apply)(Credentials.unapply))
+  )(Credentials.apply)(credentialsUnapply))
 
   def authenticate: Action[AnyContent] = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
 //    Redirect(controllers.routes.Application.listProjects())

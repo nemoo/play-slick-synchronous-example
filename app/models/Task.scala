@@ -77,7 +77,6 @@ private class TasksTable(tag: Tag) extends Table[Task](tag, "task") {
   def status = column[TaskStatus.Value]("status")
   def project = column[Long]("project")
 
-  def * = (id, color, status, project) <> (Task.tupled, Task.unapply)
-  def ? = (id.?, color.?, status.?, project.?).shaped.<>({ r => import r._; _1.map(_ => Task.tupled((_1.get, _2.get, _3.get, _4.get))) }, (_: Any) => throw new Exception("Inserting into ? projection not supported."))
+  def * = (id, color, status, project) <> ((Task.apply _).tupled, Task.unapply)
 }
 
