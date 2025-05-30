@@ -22,7 +22,7 @@ jobs:
     - name: Setup Sbt + Java
       uses: coursier/setup-action@v1
       with:
-        jvm: adopt:21
+        jvm: 21
         apps: sbt        
     - name: Compile
       run: sbt compile
